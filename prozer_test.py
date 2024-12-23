@@ -50,6 +50,9 @@ class ScrapeRequest(BaseModel):
 class ProcessRequest(BaseModel):
     text: str
 
+class CombinedRequest(BaseModel):
+    url: str
+
 def get_db():
     conn = sqlite3.connect(DB_PATH)
     return conn
@@ -94,3 +97,12 @@ def process_endpoint(request: ProcessRequest, conn: sqlite3.Connection = Depends
     result = process_text(request.text, cursor)
     conn.commit()
     return { "text": request.text, "result": result }
+
+@app.post("/combined")
+def combined_endpoint(request: CombinedRequest, conn: sqlite3.Connection = Depends(get_db)):
+    cursor = conn.cursor()
+    content = scrape_website(request.url, cursor)
+    result = process_text(content["descriptions"][0], cursor)
+    cursor.execute("INSERT INTO combined_results (url, scraped_content, processed_result) VALUES (?, ?, ?)", (request.url, str(content), str(result)))
+    conn.commit()
+    return { "url": request.url, "scraped_content": content, "processed_result": result }
