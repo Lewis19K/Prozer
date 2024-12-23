@@ -4,7 +4,7 @@ Para realizar la prueba se programó una API con FastAPI que realiza scraping de
 
 ## Funcionalidades
 
-El proyecto inclute tres endpoints que fueron solicitadosÑ
+El proyecto inclute tres endpoints que fueron solicitados:
 
 1. `/scrape`: Recibe una URL de un sitio de noticias como [elmostrador.cl](https://elmostrador.cl/) y extrae los títulos y descripciones de los artículos de ese sitio. Además, el resultado de la extracción se almacena en una tabla de la base de datos, llamada `scraped_data`.
 
